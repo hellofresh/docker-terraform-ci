@@ -1,0 +1,9 @@
+language: bash
+services: docker
+
+branches:
+  only:
+    - master
+
+script:
+  - ci/scripts/build.sh
