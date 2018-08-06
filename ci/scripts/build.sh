@@ -8,18 +8,9 @@ if [[ ! "${TRAVIS}" ]]; then
 fi
 
 IMAGE="quay.io/hellofresh/ci-terraform"
-TAG="${VERSION}-${VARIANT}"
+TAG="${VERSION}"
 
-CHANGES=$(git diff --name-only ${TRAVIS_COMMIT_RANGE})
-
-[[ -n "$(grep "^${VERSION}/${VARIANT}" <<< "$CHANGES")" ]] && BUILD_REQUIRED=1
-
-if [[ -z ${BUILD_REQUIRED} ]]; then
-  echo "Version ${TAG} wasn't changed. Nothing to do."
-  exit 0
-fi
-
-docker build -t ${IMAGE}:${TAG} ./${VERSION}/${VARIANT}/
+docker build -t ${IMAGE}:${TAG} .
 
 if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "${TRAVIS_BRANCH}" == "master" ]]; then
   docker login --username="$QUAY_USER" --password="$QUAY_PASS" quay.io
